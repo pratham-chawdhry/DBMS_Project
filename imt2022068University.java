@@ -141,64 +141,64 @@ public class  imt2022068University{
         stmt.executeUpdate(s);
     }
 
-    // public static void deleteFromTable(String tableName,String searchColumns,String searchValues,int searchBy,Statement stmt) throws SQLException{
-    //     String[] arr=searchColumns.split(",");
-    //     String[] arr2=searchValues.split(",");
-    //     int x=arr.length;
-    //     String s="Select max("+tableName+"_id) from "+tableName;
-    //     ResultSet rs = stmt.executeQuery(s);
-    //     rs.next();
-    //     int maxId=rs.getInt(1);
-    //     s="Select "+tableName+"_id from "+tableName + " where "+arr[0]+"="+arr2[0];
-    //     if(searchBy==1){
-    //         for(int i=1;i<x;i++){
-    //             s=s+" and "+arr[i]+"="+arr2[i];
-    //         }
-    //         rs=stmt.executeQuery(s);
-    //     }
-    //     else if(searchBy==2){
-    //         for(int i=1;i<x;i++){
-    //             s=s+" or "+arr[i]+"="+arr2[i];
-    //         }
-    //         rs=stmt.executeQuery(s);
-    //     }
-    //     else{
-    //         System.out.println("please enter valid searchBy value");
-    //         return;
-    //     }
+    public static void deleteFromTable(String tableName,String searchColumns,String searchValues,int searchBy,Statement stmt) throws SQLException{
+        String[] arr = searchColumns.split(",");
+        String[] arr2 = searchValues.split(",");
+        int x = arr.length;
+        String s = "Select max("+tableName+"_id) from "+tableName;
+        ResultSet rs = stmt.executeQuery(s);
+        rs.next();
+        int maxId = rs.getInt(1);
+        s = "Select " + tableName + "_id from " + tableName + " where " + arr[0] + "="+arr2[0];
+        if (searchBy == 1){
+            for(int i = 1; i < x; i++){
+                s = s + " and " + arr[i] + "=" + arr2[i];
+            }
+            rs = stmt.executeQuery(s);
+        }
+        else if(searchBy == 2){
+            for(int i = 1; i < x; i++){
+                s = s + " or " + arr[i] + "=" + arr2[i];
+            }
+            rs = stmt.executeQuery(s);
+        }
+        else{
+            System.out.println("please enter valid searchBy value");
+            return;
+        }
 
-    //     ArrayList<Integer> temp=new ArrayList<>();
-    //     while(rs.next()){
-    //         temp.add(rs.getInt(1));
-    //     }
-    //     int counter=temp.size();
+        ArrayList<Integer> temp = new ArrayList<>();
+        while(rs.next()){
+            temp.add(rs.getInt(1));
+        }
+        int counter=temp.size();
 
-    //     s="delete from "+tableName+" where "+arr[0]+"="+arr2[0];
-    //     if(searchBy==1){
-    //         for(int i=1;i<x;i++){
-    //             s=s+" and "+arr[i]+"="+arr2[i];
-    //         }
-    //         stmt.executeUpdate(s);
-    //     }
-    //     else{
-    //         for(int i=1;i<x;i++){
-    //             s=s+" or "+arr[i]+"="+arr2[i];
-    //         }
-    //         stmt.executeUpdate(s);
-    //     }
+        s = "delete from " + tableName + " where " + arr[0] + "=" + arr2[0];
+        if(searchBy == 1){
+            for(int i = 1; i < x; i++){
+                s = s + " and " + arr[i] + "=" + arr2[i];
+            }
+            stmt.executeUpdate(s);
+        }
+        else{
+            for(int i = 1; i < x; i++){
+                s = s + " or " + arr[i] + "=" + arr2[i];
+            }
+            stmt.executeUpdate(s);
+        }
         
-    //     for(int j=counter-1;j>=0;j--){
-    //         for(int i=temp.get(j)+1;i<=maxId;i++){
-    //             int a=i-1;
-    //             s="update "+tableName+" set "+tableName+"_id="+a+" where "+tableName+"_id="+i;
-    //             stmt.executeUpdate(s);
-    //         }
-    //     }
+        // for(int j = counter-1; j >= 0; j--){
+        //     for(int i = temp.get(j)+1; i <= maxId;i++){
+        //         int a = i-1;
+        //         s = "update " + tableName + " set " + tableName + "_id=" + a + " where " + tableName + "_id=" + i;
+        //         stmt.executeUpdate(s);
+        //     }
+        // }
 
-    //     int bla=maxId-counter;
-    //     s="Alter table "+tableName+" auto_increment="+bla;
-    //     stmt.executeUpdate(s);
-    // }
+        // int bla = maxId - counter;
+        // s = "Alter table " + tableName + " auto_increment=" + bla;
+        // stmt.executeUpdate(s);
+    }
 
     // public static void multiselect(int tableno1,int tableno2,Statement stmt) throws SQLException{
     //     if(tableno1==tableno2){
@@ -547,46 +547,42 @@ public class  imt2022068University{
                             break;
                     }
                 }
-
-                // else if(x==4){
-                //     System.out.print("enter number for table using above table: ");
-                //     int tableNo=sc.nextInt();
-                //     garbage=sc.nextLine();
-                //     System.out.println("enter mode with which conditions are connected in case of multiple conditions( 1 for and and 2 for or): ");
-                //     int searchBy=sc.nextInt();
-                //     garbage=sc.nextLine();
-                //     System.out.println("enter comma-separated columns you want to search using: ");
-                //     String searchColumns=sc.nextLine();
-                //     System.out.println("enter comma-separated values you want to search using: ");
-                //     String searchValues=sc.nextLine();
-                //     if(searchColumns.split(",").length!=searchValues.split(",").length){
-                //         System.out.println("enter same number of columns and values");
-                //         continue;
-                //     }
-                //     switch (tableNo){
-                //         case 1:
-                //             deleteFromTable("player",searchColumns,searchValues,searchBy,stmt);
-                //             break;
-                //         case 2:
-                //             deleteFromTable("team",searchColumns,searchValues,searchBy,stmt);
-                //             break;
-                //         case 3:
-                //             deleteFromTable("playertype",searchColumns,searchValues,searchBy,stmt);
-                //             break;
-                //         case 4:
-                //             deleteFromTable("weapon",searchColumns,searchValues,searchBy,stmt);
-                //             break;
-                //         case 5:
-                //             deleteFromTable("server",searchColumns,searchValues,searchBy,stmt);
-                //             break;
-                //         case 6:
-                //             deleteFromTable("weapontype",searchColumns,searchValues,searchBy,stmt);
-                //             break;
-                //         default:
-                //             System.out.println("enter valid table number");
-                //             break;
-                //     }
-                // }
+                else if( x == 4){
+                    System.out.print("enter number for table using above table: ");
+                    int tableNo=sc.nextInt();
+                    garbage=sc.nextLine();
+                    System.out.println("enter mode with which conditions are connected in case of multiple conditions( 1 for and and 2 for or): ");
+                    int searchBy=sc.nextInt();
+                    garbage=sc.nextLine();
+                    System.out.println("enter comma-separated columns you want to search using: ");
+                    String searchColumns=sc.nextLine();
+                    System.out.println("enter comma-separated values you want to search using: ");
+                    String searchValues=sc.nextLine();
+                    if(searchColumns.split(",").length!=searchValues.split(",").length){
+                        System.out.println("enter same number of columns and values");
+                        continue;
+                    }
+                    switch (tableNo){
+                        case 1:
+                            deleteFromTable("teacher",searchColumns,searchValues,searchBy,stmt);
+                            break;
+                        case 2:
+                            deleteFromTable("department",searchColumns,searchValues,searchBy,stmt);
+                            break;
+                        case 3:
+                            deleteFromTable("course",searchColumns,searchValues,searchBy,stmt);
+                            break;
+                        case 4:
+                            deleteFromTable("student",searchColumns,searchValues,searchBy,stmt);
+                            break;
+                        case 5:
+                            deleteFromTable("insurance",searchColumns,searchValues,searchBy,stmt);
+                            break;
+                        default:
+                            System.out.println("enter valid table number");
+                            break;
+                    }
+                }
                 // else if(x==5){
                 //     int tableno1=sc.nextInt();
                 //     int tableno2=sc.nextInt();
