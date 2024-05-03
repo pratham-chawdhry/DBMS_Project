@@ -110,30 +110,36 @@ public class  imt2022068University{
         System.out.println("+" + spaces_second + "+"); 
     }
 
-    // public static void insertIntoTable(String tableName,String columns,String values,Statement stmt) throws SQLException{
-    //     String s="insert into "+tableName+"("+columns+") values("+values+")";
-    //     stmt.executeUpdate(s);
-    // }
+    public static void insertIntoTable(String tableName,String columns,String values,Statement stmt) throws SQLException{
+        String s="insert into "+tableName+"("+columns+") values("+values+")";
+        // stmt.executeUpdate(s);
+        try{
+            stmt.executeUpdate(s);
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
-    // public static void updateTable(String tableName,String updateColumns,String updateValues,String searchColumns,String searchValues,Statement stmt) throws SQLException{
-    //     String[] arr=updateColumns.split(",");
-    //     String[] arr2=updateValues.split(",");
-    //     String[] arr3=searchColumns.split(",");
-    //     String[] arr4=searchValues.split(",");
-    //     String s="update "+tableName+" set "+arr[0]+"="+arr2[0];
-    //     if(arr.length>1){
-    //         for(int i=1;i<arr.length;i++){
-    //             s=s+","+arr[i]+"="+arr2[i];
-    //         }
-    //     }
-    //     s=s+" where "+arr3[0]+"="+arr4[0];
-    //     if(arr3.length>1){
-    //         for(int i=1;i<arr3.length;i++){
-    //             s=s+" and "+arr3[i]+"="+arr4[i];
-    //         }
-    //     }
-    //     stmt.executeUpdate(s);
-    // }
+    public static void updateTable(String tableName,String updateColumns,String updateValues,String searchColumns,String searchValues,Statement stmt) throws SQLException{
+        String[] arr = updateColumns.split(",");
+        String[] arr2 = updateValues.split(",");
+        String[] arr3 = searchColumns.split(",");
+        String[] arr4 = searchValues.split(",");
+        String s="update " + tableName + " set " + arr[0] + "="+arr2[0];
+        if(arr.length>1){
+            for(int i=1;i<arr.length;i++){
+                s = s + "," + arr[i] + "=" + arr2[i];
+            }
+        }
+        s = s+" where " + arr3[0] + "="+arr4[0];
+        if(arr3.length>1){
+            for(int i=1;i<arr3.length;i++){
+                s = s + " and " + arr3[i] + "=" + arr4[i];
+            }
+        }
+        stmt.executeUpdate(s);
+    }
 
     // public static void deleteFromTable(String tableName,String searchColumns,String searchValues,int searchBy,Statement stmt) throws SQLException{
     //     String[] arr=searchColumns.split(",");
@@ -401,21 +407,21 @@ public class  imt2022068University{
 
 
             while(true){
-                System.out.println("+------------------+");
-                System.out.println("|command    |number|");
-                System.out.println("+--------------+");
-                System.out.println("|select     |1     |");
-                System.out.println("|insert     |2     |");
-                System.out.println("|update     |3     |");
-                System.out.println("|delete     |4     |");
-                System.out.println("|multiselect|5     |");
-                System.out.println("|exit       |-1    |");
-                System.out.println("+---------====-----+");
+                System.out.println("+--------------------------+");
+                System.out.println("|    Command    |  Number  |");
+                System.out.println("+--------------------------+");
+                System.out.println("|  Select       |  1       |");
+                System.out.println("|  Insert       |  2       |");
+                System.out.println("|  Update       |  3       |");
+                System.out.println("|  Delete       |  4       |");
+                System.out.println("|  Multiselect  |  5       |");
+                System.out.println("|  Exit         |  -1      |");
+                System.out.println("+--------------------------+");
 
                 System.out.print("enter number for command using above table: ");
                 int x = sc.nextInt();
 
-                if(x==-1){
+                if(x == -1){
                     break;
                 }
                 System.out.println("+-----------------------------+");
@@ -427,7 +433,7 @@ public class  imt2022068University{
                 System.out.println("|  student         |  4       |");
                 System.out.println("|  insurance       |  5       |");
                 System.out.println("+-----------------------------+");
-                if(x==1){
+                if(x == 1){
                     System.out.print("enter number for table using above table: ");
                     int tableNo=sc.nextInt();
                     garbage=sc.nextLine();
@@ -454,88 +460,93 @@ public class  imt2022068University{
                             break;
                     }
                 }
+                else if(x == 2){
+                    System.out.print("enter number for table using above table: ");
+                    int tableNo=sc.nextInt();
+                    garbage=sc.nextLine();
+                    System.out.println("enter comma-separated columns into which you want to insert: ");
+                    String columns=sc.nextLine();
+                    System.out.println("enter comma-separated values you want to insert into thoes columns(multipe entries are not accepted): ");
+                    String values=sc.nextLine();
+                    
+                    if(columns.split(",").length!=values.split(",").length){
+                        System.out.println("enter same number of columns and values");
+                        continue;
+                    }
 
-                // else if(x==2){
-                //     System.out.print("enter number for table using above table: ");
-                //     int tableNo=sc.nextInt();
-                //     garbage=sc.nextLine();
-                //     System.out.println("enter comma-separated columns into which you want to insert: ");
-                //     String columns=sc.nextLine();
-                //     System.out.println("enter comma-separated values you want to insert into thoes columns(multipe entries are not accepted): ");
-                //     String values=sc.nextLine();
-                //     if(columns.split(",").length!=values.split(",").length){
-                //         System.out.println("enter same number of columns and values");
-                //         continue;
-                //     }
-                //     switch (tableNo){
-                //         case 1:
-                //             insertIntoTable("player",columns,values,stmt);
-                //             break;
-                //         case 2:
-                //             insertIntoTable("team",columns,values,stmt);
-                //             break;
-                //         case 3:
-                //             insertIntoTable("playertype",columns,values,stmt);
-                //             break;
-                //         case 4:
-                //             insertIntoTable("weapon",columns,values,stmt);
-                //             break;
-                //         case 5:
-                //             insertIntoTable("server",columns,values,stmt);
-                //             break;
-                //         case 6:
-                //             insertIntoTable("weapontype",columns,values,stmt);
-                //             break;
-                //         default:
-                //             System.out.println("enter valid table number");
-                //             break;
-                //     }
-                // }
+                    String [] arr = columns.split(",");
 
-                // else if(x==3){
-                //     System.out.print("enter number for table using above table: ");
-                //     int tableNo=sc.nextInt();
-                //     garbage = sc.nextLine();
-                //     System.out.println("enter comma-separated columns you want to update: ");
-                //     String updateColumns=sc.nextLine();
-                //     System.out.println("enter comma-separated values you want to update into thoes columns: ");
-                //     String updateValues=sc.nextLine();
-                //     if(updateColumns.split(",").length!=updateValues.split(",").length){
-                //         System.out.println("enter same number of columns and values");
-                //         continue;
-                //     }
-                //     System.out.println("enter comma-separated columns you want to use to search: ");
-                //     String searchColumns=sc.nextLine();
-                //     System.out.println("enter comma-separated values you want to use to search: ");
-                //     String searchValues=sc.nextLine();
-                //     if(searchColumns.split(",").length!=searchValues.split(",").length){
-                //         System.out.println("enter same number of columns and values");
-                //         continue;
-                //     }
-                //     switch (tableNo){
-                //         case 1:
-                //             updateTable("player",updateColumns,updateValues,searchColumns,searchValues,stmt);
-                //             break;
-                //         case 2:
-                //             updateTable("team",updateColumns,updateValues,searchColumns,searchValues,stmt);
-                //             break;
-                //         case 3:
-                //             updateTable("playertype",updateColumns,updateValues,searchColumns,searchValues,stmt);
-                //             break;
-                //         case 4:
-                //             updateTable("weapon",updateColumns,updateValues,searchColumns,searchValues,stmt);
-                //             break;
-                //         case 5:
-                //             updateTable("server",updateColumns,updateValues,searchColumns,searchValues,stmt);
-                //             break;
-                //         case 6:
-                //             updateTable("weapontype",updateColumns,updateValues,searchColumns,searchValues,stmt);
-                //             break;
-                //         default:
-                //             System.out.println("enter valid table number");
-                //             break;
-                //     }
-                // }
+                    for(int i=0;i<arr.length;i++){
+                        System.out.println(arr[i]+" "+values.split(",")[i]);
+                    }
+
+                    String s="insert into "+"("+columns+") values("+values+")";
+                    System.out.println(s);
+
+
+                    switch (tableNo){
+                        case 1:
+                            insertIntoTable("teacher",columns,values,stmt);
+                            break;
+                        case 2:
+                            insertIntoTable("department",columns,values,stmt);
+                            break;
+                        case 3:
+                            insertIntoTable("course",columns,values,stmt);
+                            break;
+                        case 4:
+                            insertIntoTable("student",columns,values,stmt);
+                            break;
+                        case 5:
+                            insertIntoTable("insurance",columns,values,stmt);
+                            break;
+                        default:
+                            System.out.println("enter valid table number");
+                            break;
+                    }
+                }
+
+                else if(x == 3){
+                    System.out.print("enter number for table using above table: ");
+                    int tableNo=sc.nextInt();
+                    garbage = sc.nextLine();
+                    System.out.println("enter comma-separated columns you want to update: ");
+                    String updateColumns=sc.nextLine();
+                    System.out.println("enter comma-separated values you want to update into thoes columns: ");
+                    String updateValues=sc.nextLine();
+                    if(updateColumns.split(",").length!=updateValues.split(",").length){
+                        System.out.println("enter same number of columns and values");
+                        continue;
+                    }
+                    System.out.println("enter comma-separated columns you want to use to search: ");
+                    String searchColumns=sc.nextLine();
+                    System.out.println("enter comma-separated values you want to use to search: ");
+                    String searchValues=sc.nextLine();
+                    if(searchColumns.split(",").length!=searchValues.split(",").length){
+                        System.out.println("enter same number of columns and values");
+                        continue;
+                    }
+                    switch (tableNo){
+                        case 1:
+                            updateTable("teacher",updateColumns,updateValues,searchColumns,searchValues,stmt);
+                            break;
+                        case 2:
+                            updateTable("department",updateColumns,updateValues,searchColumns,searchValues,stmt);
+                            break;
+                        case 3:
+                            updateTable("course",updateColumns,updateValues,searchColumns,searchValues,stmt);
+                            break;
+                        case 4:
+                            updateTable("student",updateColumns,updateValues,searchColumns,searchValues,stmt);
+                            break;
+                        case 5:
+                            updateTable("insurance",updateColumns,updateValues,searchColumns,searchValues,stmt);
+                            break;
+                        default:
+                            System.out.println("enter valid table number");
+                            break;
+                    }
+                }
 
                 // else if(x==4){
                 //     System.out.print("enter number for table using above table: ");
