@@ -1,0 +1,56 @@
+insert into department(department_name) values('Computer Science');
+insert into department(department_name) values('Electrical');
+insert into department(department_name) values('Mechanical');
+insert into department(department_name) values('Civil');
+
+insert into teacher(teacher_name, age, department_id) values('Mrs. Sunita Choudhary', 30, 1);
+insert into teacher(teacher_name, age, department_id) values('Mr. Vishal Mane', 25, 1);
+insert into teacher(teacher_name, age, department_id) values('Ms. Priyanka Dubey', 35, 3);
+insert into teacher(teacher_name, age, department_id) values('Mr. Prashant Khandelwal', 40, 4);
+insert into teacher(teacher_name, age, department_id) values('Mrs. Pooja Dubey', 28, 2);
+insert into teacher(teacher_name, age, department_id) values('Mr. Vishal Rao', 32, 2);
+insert into teacher(teacher_name, age, department_id) values('Mr. Rohit Sharma', 36, 3);
+insert into teacher(teacher_name, age, department_id) values('Mrs. Hasina Ahmed', 38, 4);
+
+insert into course(course_name, department_id) values ('DBMS', 1);
+insert into course(course_name, department_id) values ('Software Engineering', 1);
+insert into course(course_name, department_id) values ('DAA', 1);
+insert into course(course_name, department_id) values ('Electromagnetics', 2);
+insert into course(course_name, department_id) values ('Signals and Systems', 2);
+insert into course(course_name, department_id) values ('Power Electronics', 2);
+insert into course(course_name, department_id) values ('Statics', 3);
+insert into course(course_name, department_id) values ('Fluid Mechanics', 3);
+insert into course(course_name, department_id) values ('Heat Transfer', 4);
+insert into course(course_name, department_id) values ('Structural Analysis', 4);
+
+insert into student(student_name, student_age, teacher_id, course_id) values('Krish', 20, 1, 1);
+insert into student(student_name, student_age, teacher_id, course_id) values('Anil', 21, 1, 1);
+insert into student(student_name, student_age, teacher_id, course_id) values('Ketan', 22, 1, 2);
+insert into student(student_name, student_age, teacher_id, course_id) values('Madhav', 18, 2, 3);
+insert into student(student_name, student_age, teacher_id, course_id) values('Vedant', 19, 2, 3);
+insert into student(student_name, student_age, teacher_id, course_id) values('Mohit', 20, 5, 4);
+insert into student(student_name, student_age, teacher_id, course_id) values('Aditya', 20, 6, 5);
+insert into student(student_name, student_age, teacher_id, course_id) values('Md. Zainab', 21, 5, 4);
+insert into student(student_name, student_age, teacher_id, course_id) values('Sunita', 20, 3,7);
+insert into student(student_name, student_age, teacher_id, course_id) values('Aditi', 19, 3,7);
+insert into student(student_name, student_age, teacher_id, course_id) values('Vijay', 20, 7,8);
+insert into student(student_name, student_age, teacher_id, course_id) values('Pooja', 21, 4, 9);
+insert into student(student_name, student_age, teacher_id, course_id) values('Rohit', 18, 8, 10);
+insert into student(student_name, student_age, teacher_id, course_id) values('Hasina', 18, 8, 10);
+
+insert into insurance(people_name, teacher_id) values('Ankita', 1);
+insert into insurance(people_name, teacher_id) values('Garima', 1);
+insert into insurance(people_name, teacher_id) values('Pooja', 1);
+insert into insurance(people_name, teacher_id) values('Shalini', 2);
+insert into insurance(people_name, teacher_id) values('Vijay', 2);
+insert into insurance(people_name, teacher_id) values('Raghav', 3);
+insert into insurance(people_name, teacher_id) values('Rushil', 3);
+insert into insurance(people_name, teacher_id) values('Arghya', 4);
+insert into insurance(people_name, teacher_id) values('Bhavya', 4);
+insert into insurance(people_name, teacher_id) values('Krishna', 5);
+insert into insurance(people_name, teacher_id) values('Draupadi', 5);
+insert into insurance(people_name, teacher_id) values('Sita', 6);
+insert into insurance(people_name, teacher_id) values('Yudhishtir', 7);
+insert into insurance(people_name, teacher_id) values('Kunti', 7);
+insert into insurance(people_name, teacher_id) values('Shruti', 8);
+insert into insurance(people_name, teacher_id) values('Dhruv', 8);
