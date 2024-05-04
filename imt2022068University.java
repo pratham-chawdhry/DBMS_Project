@@ -1,7 +1,9 @@
 import java.sql.*;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class  imt2022068University{
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -10,53 +12,8 @@ public class  imt2022068University{
     static final String USER = "root";
     static final String PASSWORD = "pc02@December";
 
-    public static void selectTable(String tableName,String columns,Statement stmt) throws SQLException{
-        String s="select "+columns+" from "+tableName;
-        int x;
-        String[] temp; 
-
-        if(columns.equals("*")){
-            if(tableName.equals("teacher")){
-                x=4;
-                String[] arr={"teacher_id","teacher_name","age","department_id"};
-                temp=arr;
-            }
-            else if(tableName.equals("department")){
-                x=2;
-                String[] arr={"department_id","department_name"};
-                temp=arr;
-            }
-            else if(tableName.equals("course")){
-                x=3;
-                String[] arr={"course_id","course_name","department_id"};
-                temp=arr;
-            }
-            else if (tableName.equals("student")){
-                x=4;
-                String[] arr={"student_id","student_name","teacher_id", "course_id"};
-                temp=arr;
-            }
-            else if (tableName.equals("insurance")){
-                x=3;
-                String[] arr={"people_id", "people_name", "teacher_id"};
-                temp=arr;
-            }
-            else{
-                x=0;
-                temp=null;
-            }
-        }
-        else{
-            String[] arr=columns.split(",");
-            System.out.println(arr);
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] = arr[i].trim();
-            }
-            x=arr.length;
-            temp=arr;
-        }
+    public static void displayTable(String s, String[] temp, int x, Statement stmt) throws SQLException {
         ResultSet rs = stmt.executeQuery(s);
-
         int[] tempLengths = new int[x];
         Arrays.fill(tempLengths, 0);
         int sum = 0;
@@ -110,15 +67,59 @@ public class  imt2022068University{
         System.out.println("+" + spaces_second + "+"); 
     }
 
+    public static void selectTable(String tableName,String columns,Statement stmt) throws SQLException{
+        String s="select "+columns+" from "+tableName;
+        int x;
+        String[] temp; 
+
+        if(columns.equals("*")){
+            if(tableName.equals("teacher")){
+                x=4;
+                String[] arr={"teacher_id","teacher_name","age","department_id"};
+                temp=arr;
+            }
+            else if(tableName.equals("department")){
+                x=2;
+                String[] arr={"department_id","department_name"};
+                temp=arr;
+            }
+            else if(tableName.equals("course")){
+                x=3;
+                String[] arr={"course_id","course_name","department_id"};
+                temp=arr;
+            }
+            else if (tableName.equals("student")){
+                x=4;
+                String[] arr={"student_id","student_name","teacher_id", "course_id"};
+                temp=arr;
+            }
+            else if (tableName.equals("insurance")){
+                x=3;
+                String[] arr={"people_id", "people_name", "teacher_id"};
+                temp=arr;
+            }
+            else{
+                x=0;
+                temp=null;
+            }
+        }
+        else{
+            String[] arr=columns.split(",");
+            System.out.println(arr);
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].trim();
+            }
+            x=arr.length;
+            temp=arr;
+        }
+
+        displayTable(s, temp, x, stmt);
+    }
+
     public static void insertIntoTable(String tableName,String columns,String values,Statement stmt) throws SQLException{
         String s="insert into "+tableName+"("+columns+") values("+values+")";
         // stmt.executeUpdate(s);
-        try{
-            stmt.executeUpdate(s);
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
+        stmt.executeUpdate(s);
     }
 
     public static void updateTable(String tableName,String updateColumns,String updateValues,String searchColumns,String searchValues,Statement stmt) throws SQLException{
@@ -171,227 +172,247 @@ public class  imt2022068University{
         while(rs.next()){
             temp.add(rs.getInt(1));
         }
-        int counter=temp.size();
+        int counter = temp.size();
 
         s = "delete from " + tableName + " where " + arr[0] + "=" + arr2[0];
         if(searchBy == 1){
             for(int i = 1; i < x; i++){
                 s = s + " and " + arr[i] + "=" + arr2[i];
             }
-            stmt.executeUpdate(s);
+            try{
+                stmt.executeUpdate(s);
+                System.out.println("Committed");
+            }
+            catch(SQLException e){
+                System.out.println("Rollback");
+                e.printStackTrace();
+            }
         }
         else{
             for(int i = 1; i < x; i++){
                 s = s + " or " + arr[i] + "=" + arr2[i];
             }
-            stmt.executeUpdate(s);
+            try{
+                stmt.executeUpdate(s);
+                System.out.println("Committed");
+            }
+            catch(SQLException e){
+                System.out.println("Rollback");
+                e.printStackTrace();
+            }
         }
-        
-        // for(int j = counter-1; j >= 0; j--){
-        //     for(int i = temp.get(j)+1; i <= maxId;i++){
-        //         int a = i-1;
-        //         s = "update " + tableName + " set " + tableName + "_id=" + a + " where " + tableName + "_id=" + i;
-        //         stmt.executeUpdate(s);
-        //     }
-        // }
-
-        // int bla = maxId - counter;
-        // s = "Alter table " + tableName + " auto_increment=" + bla;
-        // stmt.executeUpdate(s);
     }
 
-    // public static void multiselect(int tableno1,int tableno2,Statement stmt) throws SQLException{
-    //     if(tableno1==tableno2){
-    //         switch(tableno1){
-    //             case 1:
-    //                 selectTable("player","*", stmt);
-    //                 break;
-    //             case 2:
-    //                 selectTable("team","*", stmt);
-    //                 break;
-    //             case 3:
-    //                 selectTable("playertype","*", stmt);
-    //                 break;
-    //             case 4:
-    //                 selectTable("weapon","*", stmt);
-    //                 break;
-    //             case 5:
-    //                 selectTable("server","*", stmt);
-    //                 break;
-    //             case 6:
-    //                 selectTable("weapontype","*", stmt);
-    //                 break;
-    //             default:
-    //                 System.out.println("enter valid table number");
-    //         }
-    //     }
-    //     else if(tableno1==1){
-    //         switch(tableno2){
-    //             case 2:
-    //                 String s="select player.*,team.* from player inner join team on player.team_id=team.team_id";
-    //                 ResultSet rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(5)+"|"+rs.getString(4)+"|"+rs.getString(7)+"|"+rs.getString(8)+"|");
-    //                 }
-    //                 break;
-    //             case 3:
-    //                 s="select player.*,playertype.* from player inner join playertype on player.playertype_id=playertype.playertype_id";
-    //                 rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(4)+"|"+rs.getString(5)+"|"+rs.getString(6)+"|"+rs.getString(7)+"|");
-    //                 }
-    //                 break;
-    //             case 4:
-    //                 s="select player.*,weapon.* from player inner join weapon on player.weapon_id=weapon.weapon_id";
-    //                 rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(4)+"|"+rs.getString(6)+"|"+rs.getString(7)+"|");
-    //                 }
-    //                 break;
-    //             case 5:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 6:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             default:
-    //                 System.out.println("enter valid table number");
-    //         }
-    //     }
-    //     else if(tableno1==2){
-    //         switch(tableno2){
-    //             case 1:
-    //                 String s="select player.*,team.* from player inner join team on player.team_id=team.team_id";
-    //                 ResultSet rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(5)+"|"+rs.getString(4)+"|"+rs.getString(7)+"|"+rs.getString(8)+"|");
-    //                 }
-    //                 break;
-    //             case 3:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 4:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 5:
-    //                 s="select team.*,server.* from team inner join server on team.server_id=server.server_id";
-    //                 rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(5)+"|");
-    //                 }
-    //                 break;
-    //             case 6:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             default:
-    //                 System.out.println("enter valid table number");
-    //         }
-    //     }
-    //     else if(tableno1==3){
-    //         switch(tableno2){
-    //             case 1:
-    //                 String s="select player.*,playertype.* from player inner join playertype on player.playertype_id=playertype.playertype_id";
-    //                 ResultSet rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(4)+"|"+rs.getString(5)+"|"+rs.getString(6)+"|"+rs.getString(7)+"|");
-    //                 }
-    //                 break;
-    //             case 2:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 4:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 5:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 6:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             default:
-    //                 System.out.println("enter valid table number");
-    //         }
-    //     }
-    //     else if(tableno1==4){
-    //         switch(tableno2){
-    //             case 1:
-    //                 String s="select player.*,weapon.* from player inner join weapon on player.weapon_id=weapon.weapon_id";
-    //                 ResultSet rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(4)+"|"+rs.getString(6)+"|"+rs.getString(7)+"|");
-    //                 }
-    //                 break;
-    //             case 2:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 3:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 5:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 6:
-    //                 s="select weapon.*,weapontype.* from weapon inner join weapontype on weapon.weapontype_id=weapontype.weapontype_id";
-    //                 rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(5)+"|");
-    //                 }
-    //                 break;
-    //             default:
-    //                 System.out.println("enter valid table number");
-    //         }
-    //     }
-    //     else if(tableno1==5){
-    //         switch(tableno2){
-    //             case 1:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 2:
-    //                 String s="select team.*,server.* from team inner join server on team.server_id=server.server_id";
-    //                 ResultSet rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(5)+"|");
-    //                 }
-    //                 break;
-    //             case 3:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 4:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 6:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             default:
-    //                 System.out.println("enter valid table number");
-    //         }
-    //     }
-    //     else if(tableno1==6){
-    //         switch(tableno2){
-    //             case 1:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 2:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 3:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             case 4:
-    //                 String s="select weapon.*,weapontype.* from weapon inner join weapontype on weapon.weapontype_id=weapontype.weapontype_id";
-    //                 ResultSet rs = stmt.executeQuery(s);
-    //                 while(rs.next()){
-    //                     System.out.println("|"+rs.getString(1)+"|"+rs.getString(2)+"|"+rs.getString(3)+"|"+rs.getString(5)+"|");
-    //                 }
-    //                 break;
-    //             case 5:
-    //                 System.out.println("please enter tables with a related field");
-    //                 break;
-    //             default:
-    //                 System.out.println("enter valid table number");
-    //         }
-    //     }
-    // }
+    public static String[] concatenateUnique(String [] arr1, String[] arr2) {
+        Set<String> uniqueElements = new HashSet<>();
+        for (String num : arr1) {
+            uniqueElements.add(num);
+        }
+        for (String num : arr2) {
+            uniqueElements.add(num);
+        }
+
+        String[] result = new String[uniqueElements.size()];
+        int index = 0;
+        for (String num : uniqueElements) {
+            result[index++] = num;
+        }
+
+        return result;
+    }
+
+    public static void multiselect(int tableno1,Statement stmt) throws SQLException{
+        String [] arr_teacher = {"teacher_id","teacher_name", "age", "department_id"}; 
+        String [] arr_department = {"department_id","department_name"};
+        String [] arr_course = {"course_id","course_name","department_id"};
+        String [] arr_student = {"student_id","student_age", "student_name", "teacher_id", "course_id"};
+        String [] arr_insurance = {"people_id","people_name","teacher_id"};
+
+        if(tableno1 == 1){
+            System.out.println("+-----------------------------+");
+            System.out.println("|      table       |  number  |");
+            System.out.println("+-----------------------------+");
+            System.out.println("|  teacher         |  1       |");
+            System.out.println("|  department      |  2       |");
+            System.out.println("|  student         |  3       |");
+            System.out.println("|  insurance       |  4       |");
+            System.out.println("+-----------------------------+");
+
+            Scanner sc = new Scanner(System.in);
+            int tableno2;
+            System.out.println("Enter second table number");
+            tableno2 = sc.nextInt();
+
+            switch(tableno2){
+                case 1:
+                    selectTable("teacher","*", stmt);
+                    break;
+                case 2:
+                    String s="select teacher.*, department.* from teacher inner join department on teacher.department_id = department.department_id";
+                    ResultSet rs = stmt.executeQuery(s);
+                    String [] temp = concatenateUnique(arr_teacher, arr_department);
+                    displayTable(s, temp, temp.length , stmt);
+                    break;
+                case 3:
+                    s="select teacher.*, student.* from teacher inner join student on teacher.teacher_id = student.teacher_id";
+                    rs = stmt.executeQuery(s);
+                    temp = concatenateUnique(arr_teacher, arr_student);
+                    displayTable(s, temp, temp.length, stmt);
+                    break;
+                case 4:
+                    s="select teacher.*, insurance.* from teacher inner join insurance on teacher.teacher_id = insurance.teacher_id";
+                    rs = stmt.executeQuery(s);
+                    temp = concatenateUnique(arr_teacher, arr_insurance);
+                    displayTable(s, temp, temp.length, stmt);
+                    break;
+                default:
+                    System.out.println("enter valid table number");
+            }
+        }
+        else if(tableno1 == 2){
+            System.out.println("+-----------------------------+");
+            System.out.println("|      table       |  number  |");
+            System.out.println("+-----------------------------+");
+            System.out.println("|  teacher         |  1       |");
+            System.out.println("|  department      |  2       |");
+            System.out.println("|  course          |  3       |");
+            System.out.println("+-----------------------------+");
+
+            Scanner sc = new Scanner(System.in);
+            int tableno2;
+            System.out.println("Enter second table number");
+            tableno2 = sc.nextInt();
+
+            switch(tableno2){
+                case 1:
+                    String s="select teacher.*, department.* from teacher inner join department on teacher.department_id = department.department_id";
+                    ResultSet rs = stmt.executeQuery(s);
+                    String [] temp = concatenateUnique(arr_teacher, arr_department);
+                    displayTable(s, temp, temp.length , stmt);
+                    break;
+                case 2:
+                    selectTable("department","*", stmt);
+                    break;
+                case 3:
+                    s="select department.*, course.* from department inner join course on department.department_id = course.department_id";
+                    rs = stmt.executeQuery(s);
+                    temp = concatenateUnique(arr_department, arr_course);
+                    displayTable(s, temp, temp.length, stmt);
+                    break;
+                default:
+                    System.out.println("enter valid table number");
+            }
+        }
+        else if(tableno1==3){
+            System.out.println("+-----------------------------+");
+            System.out.println("|      table       |  number  |");
+            System.out.println("+-----------------------------+");
+            System.out.println("|  department      |  1       |");
+            System.out.println("|  course          |  2       |");
+            System.out.println("|  student         |  3       |");
+            System.out.println("+-----------------------------+");
+
+            Scanner sc = new Scanner(System.in);
+            int tableno2;
+            System.out.println("Enter second table number");
+            tableno2 = sc.nextInt();
+
+            switch(tableno2){
+                case 1:
+                    String s="select department.*, course.* from department inner join course on department.department_id = course.department_id";
+                    ResultSet rs = stmt.executeQuery(s);
+                    String [] temp = concatenateUnique(arr_department, arr_course);
+                    displayTable(s, temp, temp.length , stmt);
+                    break;
+                case 2:
+                    selectTable("course","*", stmt);
+                    break;
+                case 3:
+                    s="select course.*, student.* from course inner join student on course.course_id = student.course_id";
+                    rs = stmt.executeQuery(s);
+                    temp = concatenateUnique(arr_course, arr_student);
+                    displayTable(s, temp, temp.length, stmt);
+                    break;
+                default:
+                    System.out.println("enter valid table number");
+            }
+        }
+        else if(tableno1 == 4){
+            System.out.println("+-----------------------------+");
+            System.out.println("|      table       |  number  |");
+            System.out.println("+-----------------------------+");
+            System.out.println("|  teacher         |  1       |");
+            System.out.println("|  course          |  2       |");
+            System.out.println("|  student         |  3       |");
+            System.out.println("|  insurance       |  4       |");
+            System.out.println("+-----------------------------+");
+
+            Scanner sc = new Scanner(System.in);
+            int tableno2;
+            System.out.println("Enter second table number");
+            tableno2 = sc.nextInt();
+
+            switch(tableno2){
+                case 1:
+                    String s="select teacher.*, student.* from teacher inner join student on teacher.teacher_id = student.teacher_id";
+                    ResultSet rs = stmt.executeQuery(s);
+                    String [] temp = concatenateUnique(arr_teacher, arr_student);
+                    displayTable(s, temp, temp.length , stmt);
+                    break;
+                case 2:
+                    s="select course.*, student.* from course inner join student on course.course_id = student.course_id";
+                    rs = stmt.executeQuery(s);
+                    temp = concatenateUnique(arr_course, arr_student);
+                    displayTable(s, temp, temp.length, stmt);
+                    break;
+                case 3:
+                    selectTable("student","*", stmt);
+                    break;
+                case 4:
+                    s ="select student.*, insurance.* from student inner join insurance on student.teacher_id = insurance.teacher_id";
+                    rs = stmt.executeQuery(s);
+                    temp = concatenateUnique(arr_student, arr_insurance);
+                    displayTable(s, temp, temp.length, stmt);
+                    break;
+                default:
+                    System.out.println("enter valid table number");
+            }
+        }
+        else if(tableno1==5){
+            System.out.println("+-----------------------------+");
+            System.out.println("|      table       |  number  |");
+            System.out.println("+-----------------------------+");
+            System.out.println("|  teacher         |  1       |");
+            System.out.println("|  student         |  2       |");
+            System.out.println("|  insurance       |  3       |");
+            System.out.println("+-----------------------------+");
+
+            Scanner sc = new Scanner(System.in);
+            int tableno2;
+            System.out.println("Enter second table number");
+            tableno2 = sc.nextInt();
+
+            switch(tableno2){
+                case 1:
+                    String s="select teacher.*, insurance.* from teacher inner join insurance on teacher.teacher_id = insurance.teacher_id";
+                    ResultSet rs = stmt.executeQuery(s);
+                    String [] temp = concatenateUnique(arr_teacher, arr_insurance);
+                    displayTable(s, temp, temp.length , stmt);
+                    break;
+                case 2:
+                    s ="select student.*, insurance.* from student inner join insurance on student.teacher_id = insurance.teacher_id";
+                    rs = stmt.executeQuery(s);
+                    temp = concatenateUnique(arr_student, arr_insurance);
+                    displayTable(s, temp, temp.length, stmt);
+                    break;
+                case 3:
+                    selectTable("insurance","*", stmt);
+                    break;
+                default:
+                    System.out.println("enter valid table number");
+            }
+        }
+    }
 
     public static void main(String[] args) {
         Connection conn = null; 
@@ -404,7 +425,7 @@ public class  imt2022068University{
             conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
-
+            conn.setAutoCommit(false);
 
             while(true){
                 System.out.println("+--------------------------+");
@@ -583,14 +604,22 @@ public class  imt2022068University{
                             break;
                     }
                 }
-                // else if(x==5){
-                //     int tableno1=sc.nextInt();
-                //     int tableno2=sc.nextInt();
-                //     multiselect(tableno1, tableno2, stmt);
-                // }
+                else if(x==5){
+                    System.out.println("Enter table number you want to select from: ");
+                    int tableno1=sc.nextInt();
+                    multiselect(tableno1, stmt);
+                }
+                conn.commit();
             }
         } catch(SQLException se){
             se.printStackTrace();
+            try{
+                System.out.println("Rolling back");
+                conn.rollback();
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
         } catch(Exception e){
             e.printStackTrace();
         } finally{
